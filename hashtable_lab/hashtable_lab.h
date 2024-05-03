@@ -3,6 +3,8 @@
 #include <iostream>
 #include <cmath>
 #include <random>
+#include <ctime>
+
 #define WORD_LENGHT sizeof(size_t)*8
 
 using namespace std;
@@ -63,7 +65,7 @@ public:
 		_capacity = capacity;
 		_size = 0;
 		_ht = new Node<K, T>[_capacity];
-		for (size_t i = 0; i < _capacity; ++i) {
+		while (_size < _capacity){
 			K key = (K)(k_min + (double)(rand()) / RAND_MAX * (k_max - k_min + 1));
 			if (key < 0) {
 				key = abs(key);
@@ -77,7 +79,8 @@ public:
 		_capacity = capacity;
 		_size = 0;
 		_ht = new Node<K, T>[_capacity];
-		for (size_t i = 0; i < size; ++i) {
+		srand(time(0));
+		while (_size < size) {
 			K key = (K)(k_min + (double)(rand()) / RAND_MAX * (k_max - k_min + 1));
 			if (key < 0) {
 				key = abs(key);
@@ -140,7 +143,7 @@ public:
 		return false;
 	}
 
-	/*bool contains(K key) {
+	bool _contains(K key) {
 		if (_size == 0) return false;
 		if (key < 0) throw runtime_error("Key cann`t be neggative.");
 		size_t index = Hash(key);
@@ -165,7 +168,7 @@ public:
 			}
 		}
 		else return false;
-	}*/
+	}
 
 	T* search(K key) {
 		if (key < 0) throw runtime_error("Key cann`t be neggative.");
@@ -195,6 +198,10 @@ public:
 
 	void insert(K key, T value) {
 		if (key < 0) throw runtime_error("Key cann`t be neggative.");
+		if (_contains(key)) {
+			/*cout << "Elements for this key already in HashTable." << endl;*/
+			return;
+		}
 		if (_size == _capacity) {
 			_capacity =_capacity * 2;
 			HashTable<K, T> new_ht(_capacity);

@@ -21,8 +21,9 @@ int main()
 
 	cout << "Search " << hashtable_1.search(0) << ' ' << hashtable_1.search(25) << endl;
 	cout << "Contains:" << hashtable_1.contains(2) << ' ' << hashtable_1.contains(10004) << endl;
-
-
+	cout << "_Contains:" << hashtable_1._contains(0) << ' ' << hashtable_1._contains(43684578) << ' ' <<
+		hashtable_1._contains(436848) << ' ' << hashtable_1._contains(26507) << ' ' << hashtable_1._contains(26) <<
+		' ' << hashtable_1._contains(467) << endl;
 	hashtable_1.insert_or_assign(6, 5);
 	hashtable_1.insert_or_assign(26, 101);
 	hashtable_1.print();
@@ -78,28 +79,31 @@ int main()
 	for_count.print();
 
 	cout << "Count: " << for_count.count(1669600989) << ' ' << for_count.count(1) << endl <<
-		"Count: " << for_count.Hash(4362) << ' ' << for_count.Hash(2976934) << ' ' << for_count.Hash(0) << ' ' 
+		"Count: " << for_count.Hash(4362) << ' ' << for_count.Hash(2976934) << ' ' << for_count.Hash(0) << ' '
 		<< for_count.Hash(6799767) << ' ' << for_count.count(4362) << endl << endl;
 
 	//////////////////////////////////////////////////////////
 	// Task
 	//////////////////////////////////////////////////////////
 
-	/*cout << "Task: " << endl << endl;
+	cout << "Task: " << endl << endl;
 
+	int count_for_task = 100;
 	size_t size = 23;
 	for (size_t i = 25; i <= 475; i += 50) {
-		HashTable<int, int> hashtable_fot_task(i, size, -10000, 10000, 0, 1000000000);
 		int count_of_collisions = 0;
-		for (size_t j = 0; j < i; ++j) {
-			if (hashtable_fot_task[j]._flag != 0) {
-				if (hashtable_fot_task.count(hashtable_fot_task[j]._pair._key) > 0) {
-					count_of_collisions++;
+		for (int count = 0; count < count_for_task; count++) {
+			HashTable<int, int> hashtable_fot_task(i, size, -10000, 10000, 0, 1000000000);
+			for (size_t j = 0; j < i; ++j) {
+				if (hashtable_fot_task[j]._flag != 0) {
+					if (hashtable_fot_task.count(hashtable_fot_task[j]._pair._key) > 0) {
+						count_of_collisions++;
+					}
 				}
 			}
 		}
-		cout << "Capacity: " << i << " count_of_collisions = " << count_of_collisions << endl;
-	}*/
+		cout << "Capacity: " << i << " Average count_of_collisions = " << round(double(count_of_collisions) / count_for_task) << endl;
+	}
 
 
 	return 0;
