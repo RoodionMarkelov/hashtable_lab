@@ -28,8 +28,6 @@ struct Node {
 
 template <typename K, typename T>
 class HashTable {
-
-public:
 	size_t _capacity;
 	size_t _size;
 	Node<K, T>* _ht;
@@ -40,11 +38,24 @@ public:
 		std::swap(_ht, other._ht);
 	}
 
+	void resize() {
+		_capacity = _capacity * 2;
+		HashTable<K, T> new_ht(_capacity);
+		for (size_t i = 0; i < _capacity; ++i) {
+			if (_ht[i]._flag == 1) {
+				new_ht.insert(_ht[i]._pair._key, _ht[i]._pair._value);
+			}
+		}
+		new_ht._swap(*this);
+	}
+
+public:
+
 	size_t Hash(K key) {
 		if (key < 0) throw runtime_error("Key cann`t be neggative.");
 		size_t a = 27510;
 		size_t l = 27;
-		size_t tmp = size_t((key * a)) % size_t(pow(2, 64));
+		size_t tmp = size_t((key * a)) % size_t(pow(2, WORD_LENGHT));
 		size_t result = ((tmp >> l) | (tmp << WORD_LENGHT - l));
 		return result % _capacity;
 	}
@@ -196,21 +207,14 @@ public:
 		else return nullptr;
 	}
 
-	void insert(K key, T value) {
+	void insert(const K& key,const T& value) {
 		if (key < 0) throw runtime_error("Key cann`t be neggative.");
 		if (_contains(key)) {
-			/*cout << "Elements for this key already in HashTable." << endl;*/
+			cout << "Elements for this key already in HashTable." << endl;
 			return;
 		}
 		if (_size == _capacity) {
-			_capacity =_capacity * 2;
-			HashTable<K, T> new_ht(_capacity);
-			for (size_t i = 0; i < _capacity; ++i) {
-				if (_ht[i]._flag == 1) {
-					new_ht.insert(_ht[i]._pair._key, _ht[i]._pair._value);
-				}
-			}
-			new_ht._swap(*this);
+			resize();
 		}
 		size_t index = Hash(key);
 		if (_ht[index]._flag == 1) {
@@ -227,6 +231,9 @@ public:
 
 	void insert_or_assign(K key, T value) {
 		if (key < 0) throw runtime_error("Key cann`t be neggative.");
+		if (_size == _capacity) {
+			resize();
+		}
 		size_t index = Hash(key);
 		if (_ht[index]._flag != 1) {
 			_ht[index]._pair = Pair(key, value);
